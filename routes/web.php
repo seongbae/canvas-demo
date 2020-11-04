@@ -1,18 +1,25 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\WelcomeController;
+use App\Http\Controllers\HomeController;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+Auth::routes();
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', [WelcomeController::class, 'index']);
+Route::get('home', [HomeController::class, 'index']);
+
+Route::group(['namespace' => '\Seongbae\Canvas\Http\Controllers', 'middleware' => ['web']], function () {
+
+
+	Route::get('account', 'UserController@getUser');
+	Route::put('account/{id}/profile', 'UserController@updateProfile');
+	Route::post('account/{id}/password', 'UserController@updatePassword');
+
+	Route::get('dynamicModal/{id}',[
+	    'as'=>'dynamicModal',
+	    'uses'=> 'Admin\MediaController@loadModal'
+	]);		
+
+
 });
